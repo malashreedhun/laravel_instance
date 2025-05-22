@@ -37,7 +37,7 @@ class BooksController extends Controller
         try {
             return Inertia::render('be/Books/Form', [
                 'user' => $request->user(),
-                'pageTitle' => 'Create Book',
+                'pageTitle' => 'Transfer Authorization (was Create Book)',
                 'pageDescription' => '',
                 'pageData' => null,
                 'formUrl' => route('dashboard.be.books.storeUpdate')

@@ -17,7 +17,7 @@ const mainMenu = [
     {id: 4,name: 'Roles', href: '/dashboard/global/roles/list', icon: UsersIcon, routeName: 'dashboard.global.roles.list'},
 ]
 const subMenu = [
-    {id: 1, name: 'Transfer Authorization', href: '/dashboard/be/books/list', initial: 'B', routeName: 'dashboard.be.books.list'},
+    {id: 1, name: 'Transfer Authorization', href: '/dashboard/be/books/list', initial: 'T', routeName: 'dashboard.be.books.list'},
     {id: 2, name: 'Reviews', href: '/dashboard/be/bookReviews/list', initial: 'B', routeName: 'dashboard.be.bookReviews.list'},
 ]
 
@@ -77,7 +77,7 @@ export default function Authenticated({user, header, children}) {
                                         <img
                                             className="h-8 w-auto"
                                             src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                            alt="Your Company"
+                                            alt="IRA Financial"
                                         />
                                     </div>
                                     <nav className="flex flex-1 flex-col">
@@ -169,7 +169,7 @@ export default function Authenticated({user, header, children}) {
                         <img
                             className="h-8 w-auto"
                             src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                            alt="Your Company"
+                            alt="IRA Financial"
                         />
                     </div>
                     <nav className="flex flex-1 flex-col">
