@@ -17,7 +17,7 @@ const mainMenu = [
     {id: 4,name: 'Roles', href: '/dashboard/global/roles/list', icon: UsersIcon, routeName: 'dashboard.global.roles.list'},
 ]
 const subMenu = [
-    {id: 1, name: 'Books', href: '/dashboard/be/books/list', initial: 'B', routeName: 'dashboard.be.books.list'},
+    {id: 1, name: 'Transfer Authorization', href: '/dashboard/be/books/list', initial: 'B', routeName: 'dashboard.be.books.list'},
     {id: 2, name: 'Reviews', href: '/dashboard/be/bookReviews/list', initial: 'B', routeName: 'dashboard.be.bookReviews.list'},
 ]
 

@@ -17,7 +17,7 @@ export default function Form({auth, pageTitle, pageDescription, pageData, formUr
 
     useEffect(() => {
         return () => {
-            reset('title', 'ISBN_10', 'ISBN_13', 'author');
+            reset('name', 'ssn', 'ISBN_13', 'author');
         };
     }, []);
 
