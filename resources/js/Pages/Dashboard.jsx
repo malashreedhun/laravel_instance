@@ -3,12 +3,12 @@ import { Head } from '@inertiajs/react';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid'
 import {CursorArrowRaysIcon, EnvelopeOpenIcon, HomeIcon, UsersIcon} from '@heroicons/react/24/outline'
 const stats = [
-    { id: 1, name: 'Total Customers', stat: '0', icon: UsersIcon},
-    { id: 2, name: 'Total Categories', stat: '0', icon: EnvelopeOpenIcon},
-    { id: 3, name: 'Total Authors', stat: '0', icon: CursorArrowRaysIcon},
-    { id: 4, name: 'Total Books', stat: '0', icon: CursorArrowRaysIcon},
-    { id: 5, name: 'Total Orders', stat: '0', icon: CursorArrowRaysIcon},
-    { id: 6, name: 'Total Transactions', stat: '0', icon: CursorArrowRaysIcon},
+    { id: 1, name: 'Total Customerssssss', stat: '0', icon: UsersIcon},
+    { id: 2, name: 'Total Categoriesssss', stat: '0', icon: EnvelopeOpenIcon},
+    { id: 3, name: 'Total Authorssssss', stat: '0', icon: CursorArrowRaysIcon},
+    { id: 4, name: 'Total Bookssssss', stat: '0', icon: CursorArrowRaysIcon},
+    { id: 5, name: 'Total Orderssssss', stat: '0', icon: CursorArrowRaysIcon},
+    { id: 6, name: 'Total Transactionssssss', stat: '0', icon: CursorArrowRaysIcon},
 ]
 
 function classNames(...classes) {
@@ -24,7 +24,7 @@ export default function Dashboard({ auth }) {
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
         >
-            <Head title="Dashboard" />
+            <Head title="Dashboardddddd" />
             <nav className="flex border-b border-gray-200 bg-white" aria-label="Breadcrumb">
                 <ol role="list" className="mx-auto flex w-full space-x-4 px-4 sm:px-6 lg:px-8">
                     <li className="flex">
@@ -86,6 +86,8 @@ export default function Dashboard({ auth }) {
                     ))}
                 </dl>
             </div>
+
+
         </AuthenticatedLayout>
     );
 }
