@@ -8,6 +8,7 @@ use App\Http\Controllers\Global\PermissionController;
 use App\Http\Controllers\Global\ProfileController;
 use App\Http\Controllers\Global\RoleController;
 use App\Http\Controllers\Global\UserController;
+use App\Http\Controllers\DocuSignController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -46,6 +47,9 @@ Route::group([
         Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
         Route::get('/globalSettings', [GlobalSettingController::class, 'edit'])->name('globalSettings.edit');
         Route::patch('/globalSettings', [GlobalSettingController::class, 'update'])->name('globalSettings.update');
+        Route::get(' /authorization', [DocuSignController::class, 'create'])->name('authorization.create');
+        Route::post('/authorization/send', [DocuSignController::class, 'send'])->name('authorization.send');
+        Route::get('/authorization/callback', [DocuSignController::class, 'callback'])->name('authorization.callback');
         Route::group([
             'as' => 'global.',
             'prefix' => '/global',
@@ -96,6 +100,7 @@ Route::group([
                 Route::get('/edit/{id}', [BooksController::class, 'edit'])->name('edit');
                 Route::patch('/storeUpdate/{id?}', [BooksController::class, 'storeUpdate'])->name('storeUpdate');
                 Route::get('/remove/{id}', [BooksController::class, 'remove'])->name('remove');
+                Route::patch('/send-authorization', [\App\Http\Controllers\DocuSignController::class, 'send'])->name('dashboard.be.books.sendAuthorization');
             });
             Route::group([
                 'as' => 'bookReviews.',
