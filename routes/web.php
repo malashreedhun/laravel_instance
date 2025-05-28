@@ -100,7 +100,7 @@ Route::group([
                 Route::get('/edit/{id}', [BooksController::class, 'edit'])->name('edit');
                 Route::patch('/storeUpdate/{id?}', [BooksController::class, 'storeUpdate'])->name('storeUpdate');
                 Route::get('/remove/{id}', [BooksController::class, 'remove'])->name('remove');
-                Route::patch('/send-authorization', [\App\Http\Controllers\DocuSignController::class, 'send'])->name('dashboard.be.books.sendAuthorization');
+                Route::patch('/send-authorization', [\App\Http\Controllers\DocuSignController::class, 'send'])->name('dashboard.sendAuthorization');
             });
             Route::group([
                 'as' => 'bookReviews.',
