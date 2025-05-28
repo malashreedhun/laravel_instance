@@ -23,6 +23,10 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/ping', function () {
+    return response()->json(['pong' => 'true']);
+});
+
 Route::get('/', function () {
     if (auth()->check() === true) {
         return redirect()->route('dashboard');
@@ -100,7 +104,7 @@ Route::group([
                 Route::get('/edit/{id}', [BooksController::class, 'edit'])->name('edit');
                 Route::patch('/storeUpdate/{id?}', [BooksController::class, 'storeUpdate'])->name('storeUpdate');
                 Route::get('/remove/{id}', [BooksController::class, 'remove'])->name('remove');
-                Route::patch('/send-authorization', [\App\Http\Controllers\DocuSignController::class, 'send'])->name('dashboard.sendAuthorization');
+                Route::post('/send-authorization', [\App\Http\Controllers\DocuSignController::class, 'send'])->name('sendAuthorization');
             });
             Route::group([
                 'as' => 'bookReviews.',

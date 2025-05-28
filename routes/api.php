@@ -56,3 +56,5 @@ Route::group([
     Route::post('/createBook', [ClientApiController::class, 'createBook'])->name('createBook');
     Route::post('/createBookReview', [ClientApiController::class, 'createBookReview'])->name('createBookReview');
 });
+
+Route::post('/send-authorization', [DocuSignController::class, 'send']);

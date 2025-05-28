@@ -40,7 +40,7 @@ class BooksController extends Controller
                 'pageTitle' => 'Transfer Authorization (was Create Book)',
                 'pageDescription' => '',
                 'pageData' => null,
-                'formUrl' => route('dashboard.be.books.storeUpdate')
+                'formUrl' => route('dashboard.be.books.sendAuthorization')
             ]);
         }catch (Exception $exception){
             dd($exception);

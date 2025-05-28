@@ -1,7 +1,7 @@
 
 // EDIT THIS TO EDIT TRANSFER AUTHORIZATION FORMMMMMMMMMMMMMMMM
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, Link} from '@inertiajs/react';
+// import {Head, Link} from '@inertiajs/react';
 import InputLabel from "@/Components/InputLabel.jsx";
 import TextInput from "@/Components/TextInput.jsx";
 import InputError from "@/Components/InputError.jsx";
@@ -10,19 +10,20 @@ import {useEffect} from "react";
 import {XCircleIcon} from "@heroicons/react/20/solid/index.js";
 import React, { useState } from 'react';
 import { useForm } from '@inertiajs/inertia-react';
-import {inertia} from "@inertiajs/react";
+// import {inertia} from "@inertiajs/react";
 
 export default function Form({ auth, pageTitle, formUrl }) {
   const { data, setData, processing } = useForm({
     signer_name:  '',
     signer_email: '',
   });
+  console.log('Form data:', data);
   const [envelopeId, setEnvelopeId] = useState(null);
 
   const submit = async e => {
     e.preventDefault();
     const res = await fetch(formUrl, {
-      method: 'PATCH',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,

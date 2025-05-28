@@ -24,7 +24,7 @@ export default function Form({auth, pageTitle,pageDescription, pageData, rolesLi
 
     const submit = (e) => {
         e.preventDefault();
-        patch(formUrl);
+        post(formUrl);
     };
     return (
         <AuthenticatedLayout

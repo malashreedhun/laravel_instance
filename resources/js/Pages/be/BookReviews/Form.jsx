@@ -20,7 +20,7 @@ export default function Form({auth, pageTitle, pageDescription, pageData, formUr
 
     const submit = (e) => {
         e.preventDefault();
-        patch(formUrl);
+        post(formUrl);
     };
     return (
         <AuthenticatedLayout
