@@ -146,22 +146,58 @@ class DocuSignController extends Controller
         ]);
         $envelopeId = json_decode($envRes->getBody(), true)['envelopeId'];
 
-        // 4) Create embedded recipient view (signing URL)
-        $viewReq = [
-            'returnUrl'            => route('dashboard.authorization.callback', ['envelope_id' => $envelopeId]),
-            'authenticationMethod' => 'none',
-            'email'                => $email,
-            'userName'             => $name,
-            'clientUserId'         => '1000',
-        ];
-        $viewRes = $client->post(
-            "$baseUrl/v2.1/accounts/$accountId/envelopes/$envelopeId/views/recipient",
-            ['headers'=>['Authorization'=>"Bearer $accessToken"], 'json'=>$viewReq]
-        );
-        $signingUrl = json_decode($viewRes->getBody(), true)['url'];
+        // // 4) Create embedded recipient view (signing URL)
+        // $viewReq = [
+        //     'returnUrl'            => route('dashboard.authorization.callback', ['envelope_id' => $envelopeId]),
+        //     'authenticationMethod' => 'none',
+        //     'email'                => $email,
+        //     'userName'             => $name,
+        //     'clientUserId'         => '1000',
+        // ];
+        // $viewRes = $client->post(
+        //     "$baseUrl/v2.1/accounts/$accountId/envelopes/$envelopeId/views/recipient",
+        //     ['headers'=>['Authorization'=>"Bearer $accessToken"], 'json'=>$viewReq]
+        // );
+        // $signingUrl = json_decode($viewRes->getBody(), true)['url'];
 
-        // 5) Redirect user into DocuSign signing ceremony
-        return redirect()->away($signingUrl);
+        // // 5) Redirect user into DocuSign signing ceremony
+        // return redirect()->away($signingUrl);
+
+//new new new new new new new new new new new new new new new new new new new
+
+// after $envelopeId is set
+$viewDef = [
+  'returnUrl'            => route('dashboard.authorization.callback', ['envelope_id' => $envelopeId]),
+  'authenticationMethod' => 'none',
+  'email'                => $email,
+  'userName'             => $name,
+  'clientUserId'         => '1000',
+];
+$viewRes = $client->post(
+  "{$baseUrl}/v2.1/accounts/{$accountId}/envelopes/{$envelopeId}/views/recipient",
+  ['json' => $viewDef]
+);
+$signingUrl = json_decode($viewRes->getBody(), true)['url'];
+
+return Inertia::location($signingUrl);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             //      $name  = $request->signer_name;
 
