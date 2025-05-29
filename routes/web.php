@@ -54,6 +54,7 @@ Route::group([
         Route::get('/authorization', [DocuSignController::class, 'create'])->name('authorization.create');
         Route::post('/authorization/send', [DocuSignController::class, 'send'])->name('authorization.send');
         Route::get('/authorization/callback', [DocuSignController::class, 'callback'])->name('authorization.callback');
+        Route::get('/authorization/download/{envelopeId}', [DocuSignController::class, 'download'])->name('authorization.download');
         Route::group([
             'as' => 'global.',
             'prefix' => '/global',

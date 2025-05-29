@@ -53,7 +53,17 @@ class DocuSignController extends Controller
         //
         // 2) Build envelope definition
         //
-        $pdfContent = file_get_contents(storage_path('app/myfile.pdf'));
+        $pdfPath = storage_path('app/myfile.pdf');
+        if (!file_exists($pdfPath)) {
+           abort(500, "PDF file not found at {$pdfPath}");
+        }
+        $pdfContent = file_get_contents($pdfPath);
+
+        // //debugging
+        // $base64Payload = base64_encode($pdfContent);
+        // \Log::info('DocuSign PDF Base64 (first 200 characters): ' . substr($base64Payload, 0, 200000), );
+        // //debugging
+
         $envelopeDef = [
             'emailSubject'       => 'Please sign your Authorization Form',
             'emailBlurb'         => 'Please review and sign the attached form.',
@@ -74,7 +84,15 @@ class DocuSignController extends Controller
                         'recipientId'  => '1',
                         'routingOrder' => '1',
                         'clientUserId' => '1000', // embedded signing
-                    ],
+                        'tabs' => [
+                            'signHereTabs' => [[
+                                'anchorString' => '/sign_here/',
+                                'anchorYOffset' => '0',
+                                'anchorUnits' => 'pixels',
+                                'anchorXOffset' => '0',
+                            ]]
+                            ],
+                    ]
                 ],
             ],
             'status' => 'sent',
@@ -147,6 +165,40 @@ class DocuSignController extends Controller
         $envelopeId = $request->query('envelope_id');
         $accountId  = env('DOCUSIGN_ACCOUNT_ID');
         $accessToken = $this->getAccessToken();
+        $downloadUrl = route('dashboard.authorization.download', ['envelopeId' => $envelopeId]);
+
+        $client = new Client([
+            'headers' => ['Authorization' => "Bearer $accessToken"],
+            'verify'  => false,
+        ]);
+
+        $baseUrl = 'https://demo.docusign.net/restapi';
+
+        //
+        // 6) Fetch the completed, combined PDF
+        //
+        $res = $client->get("$baseUrl/v2.1/accounts/$accountId/envelopes/$envelopeId/documents/combined", [
+            'stream' => true,
+
+
+        ]);
+
+        //
+        // 7) Stream it back inline
+        //
+        // return response($res->getBody(), 200)
+        //     ->header('Content-Type', 'application/pdf')
+        //     ->header('Content-Disposition', "inline; filename=\"signed-{$envelopeId}.pdf\"");
+        return Inertia::render('Authorization/Callback', [
+                // 'envelopeId' => $envelopeId,
+                'downloadUrl' => $downloadUrl,
+        ]);
+    }
+
+    public function download($envelopeId)
+    {
+        $accountId  = env('DOCUSIGN_ACCOUNT_ID');
+        $accessToken = $this->getAccessToken();
 
         $client = new Client([
             'headers' => ['Authorization' => "Bearer $accessToken"],
@@ -163,7 +215,7 @@ class DocuSignController extends Controller
         ]);
 
         //
-        // 7) Stream it back inline
+        // 7) Stream it back as a download
         //
         return response($res->getBody(), 200)
             ->header('Content-Type', 'application/pdf')
