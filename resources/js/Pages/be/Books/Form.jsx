@@ -1,4 +1,3 @@
-
 // EDIT THIS TO EDIT TRANSFER AUTHORIZATION FORMMMMMMMMMMMMMMMM
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 // import {Head, Link} from '@inertiajs/react';
@@ -19,7 +18,6 @@ export default function Form({ auth, pageTitle, formUrl }) {
   });
   console.log('Form data:', data);
   const [envelopeId, setEnvelopeId] = useState(null);
-
 
 //SUBMIT HANDLER
   const submit = async e => {
@@ -46,8 +44,11 @@ export default function Form({ auth, pageTitle, formUrl }) {
     const json = await res.json();
     console.log('📮 Got back JSON:', json);
 
-    if (json.success) {
-      setEnvelopeId(json.envelopeId);      // ← pull the returned ID into state
+    if (json.success && json.signingUrl) {
+      // Redirect to the signing URL
+      window.location.assign(json.signingUrl);
+    } else if (json.success){
+        setEnvelopeId(json.envelopeId); // ← pull the returned ID into state
     } else {
       console.error('Envelope error payload:', json);
       alert('Error from server: ' + JSON.stringify(json));
@@ -59,7 +60,6 @@ export default function Form({ auth, pageTitle, formUrl }) {
   }
 };
 //SUBMIT HANDLER END
-
 
   return (
 <form onSubmit={submit}>
@@ -210,7 +210,6 @@ export default function Form({ auth, pageTitle, formUrl }) {
 //                         </div>
 //                         {/* CHANGE THIS SECTION FOR SELECTION OF IRA ACCOUNT TYPE */}
 
-
 //                     </div>
 //                     <div className="flex items-center justify-end align-middle gap-2 pt-3 border-t">
 //                         <Link
@@ -226,11 +225,11 @@ export default function Form({ auth, pageTitle, formUrl }) {
 //                             disabled={processing}>
 //                             NEXTESTTTTT
 //                         </PrimaryButton>
-                        // {envelopeId && (
-                        //         <div className="mt-4 p-3 border rounded bg-green-50 text-green-800">
-                        //             Envelope created successfully! ID: <code>{envelopeId}</code>
-                        //         </div>
-                        //     )}
+                // {envelopeId && (
+                //         <div className="mt-4 p-3 border rounded bg-green-50 text-green-800">
+                //             Envelope created successfully! ID: <code>{envelopeId}</code>
+                //         </div>
+                //     )}
 //                     </div>
 //                 </form>
 //             </div>
