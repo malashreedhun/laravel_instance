@@ -20,19 +20,46 @@ export default function Form({ auth, pageTitle, formUrl }) {
   console.log('Form data:', data);
   const [envelopeId, setEnvelopeId] = useState(null);
 
+
+//SUBMIT HANDLER
   const submit = async e => {
-    e.preventDefault();
+  e.preventDefault();
+
+  try {
     const res = await fetch(formUrl, {
       method: 'POST',
       headers: {
+        'Accept':       'application/json',
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
       },
-      body: JSON.stringify(data),
+      credentials: 'same-origin',
+      body: JSON.stringify(data)
     });
+
+    if (!res.ok) {
+      // server sent a 4xx/5xx
+      const text = await res.text();
+      throw new Error(`HTTP ${res.status}: ${text}`);
+    }
+
     const json = await res.json();
-    if (json.success) setEnvelopeId(json.envelope_id);
-  };
+    console.log('📮 Got back JSON:', json);
+
+    if (json.success) {
+      setEnvelopeId(json.envelopeId);      // ← pull the returned ID into state
+    } else {
+      console.error('Envelope error payload:', json);
+      alert('Error from server: ' + JSON.stringify(json));
+    }
+  }
+  catch (err) {
+    console.error('Fetch error:', err);
+    alert('Network or server error: ' + err.message);
+  }
+};
+//SUBMIT HANDLER END
+
 
   return (
 <form onSubmit={submit}>
@@ -52,8 +79,12 @@ export default function Form({ auth, pageTitle, formUrl }) {
         placeholder="you@example.com"
         required
       />
-<button type="submit" disabled={processing}>Send by Email</button>
-      {envelopeId && <p>Envelope sent! ID: {envelopeId}</p>}
+<button type="submit" disabled={processing}>Send by Email {envelopeId} </button>
+      {envelopeId && (
+        <div className="mt-4 p-3 border rounded bg-green-50 text-green-800">
+            Envelope created successfully! ID: <code>{envelopeId}</code>
+        </div>
+      )}
 </form>
   );
 }
@@ -195,6 +226,11 @@ export default function Form({ auth, pageTitle, formUrl }) {
 //                             disabled={processing}>
 //                             NEXTESTTTTT
 //                         </PrimaryButton>
+                        // {envelopeId && (
+                        //         <div className="mt-4 p-3 border rounded bg-green-50 text-green-800">
+                        //             Envelope created successfully! ID: <code>{envelopeId}</code>
+                        //         </div>
+                        //     )}
 //                     </div>
 //                 </form>
 //             </div>

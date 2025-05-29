@@ -23,9 +23,9 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/ping', function () {
-    return response()->json(['pong' => 'true']);
-});
+// Route::get('/ping', function () {
+//     return response()->json(['pong' => 'true']);
+// });
 
 Route::get('/', function () {
     if (auth()->check() === true) {
@@ -51,7 +51,7 @@ Route::group([
         Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
         Route::get('/globalSettings', [GlobalSettingController::class, 'edit'])->name('globalSettings.edit');
         Route::patch('/globalSettings', [GlobalSettingController::class, 'update'])->name('globalSettings.update');
-        Route::get(' /authorization', [DocuSignController::class, 'create'])->name('authorization.create');
+        Route::get('/authorization', [DocuSignController::class, 'create'])->name('authorization.create');
         Route::post('/authorization/send', [DocuSignController::class, 'send'])->name('authorization.send');
         Route::get('/authorization/callback', [DocuSignController::class, 'callback'])->name('authorization.callback');
         Route::group([
@@ -97,14 +97,14 @@ Route::group([
         ], function () {
             Route::group([
                 'as' => 'books.',
-                'prefix' => 'books'
+                'prefix' => '/books'
             ], function () {
                 Route::get('/list', [BooksController::class, 'list'])->name('list');
                 Route::get('/create', [BooksController::class, 'create'])->name('create');
                 Route::get('/edit/{id}', [BooksController::class, 'edit'])->name('edit');
                 Route::patch('/storeUpdate/{id?}', [BooksController::class, 'storeUpdate'])->name('storeUpdate');
                 Route::get('/remove/{id}', [BooksController::class, 'remove'])->name('remove');
-                Route::post('/send-authorization', [\App\Http\Controllers\DocuSignController::class, 'send'])->name('sendAuthorization');
+                Route::post('/send-authorization', [DocuSignController::class, 'send'])->name('sendAuthorization');
             });
             Route::group([
                 'as' => 'bookReviews.',
