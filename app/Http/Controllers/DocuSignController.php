@@ -16,6 +16,8 @@ class DocuSignController extends Controller
 
     public function send(Request $request)
     {
+
+
         $name  = $request->input('signer_name');
         $email = $request->input('signer_email');
 
@@ -53,49 +55,47 @@ class DocuSignController extends Controller
         //
         // 2) Build envelope definition
         //
-        $pdfPath = storage_path('app/myfile.pdf');
+        $pdfPath = storage_path('app/Transfer Authorization Form.pdf');
         if (!file_exists($pdfPath)) {
            abort(500, "PDF file not found at {$pdfPath}");
         }
-        $pdfContent = file_get_contents($pdfPath);
-
-        // //debugging
-        // $base64Payload = base64_encode($pdfContent);
-        // \Log::info('DocuSign PDF Base64 (first 200 characters): ' . substr($base64Payload, 0, 200000), );
-        // //debugging
+        $pdfBase64 = base64_encode(file_get_contents($pdfPath));
 
         $envelopeDef = [
             'emailSubject'       => 'Please sign your Authorization Form',
             'emailBlurb'         => 'Please review and sign the attached form.',
             'envelopeIdStamping' => true,
-            'documents' => [
-                [
-                    'documentBase64' => base64_encode($pdfContent),
+            'documents' => [[
+                    'documentBase64' =>$pdfBase64,
                     'name'           => 'Authorization.pdf',
                     'fileExtension'  => 'pdf',
                     'documentId'     => '1',
-                ],
-            ],
+                ]],
             'recipients' => [
-                'signers' => [
-                    [
+                'signers' => [[
                         'email'        => $email,
                         'name'         => $name,
                         'recipientId'  => '1',
                         'routingOrder' => '1',
                         'clientUserId' => '1000', // embedded signing
                         'tabs' => [
+                            'textTabs' => [[
+                                'tabLabel' => 'SignerName',
+                                'value'    => $request->signer_name,
+                                'documentId' => '1',
+                                'pageNumber' => '1',
+                                'xPosition' => '60',
+                                'yPosition' => '125',
+                                ]],
                             'signHereTabs' => [[
                                 'anchorString' => '/sign_here/',
                                 'anchorYOffset' => '0',
                                 'anchorUnits' => 'pixels',
-                                'anchorXOffset' => '0',
-                            ]]
-                            ],
-                    ]
-                ],
+                                'anchorXOffset' => '0',]]
+                        ],
+                    ]],
             ],
-            'status' => 'sent',
+            'status' => 'sent', // will stay invisible in DS 'sent' queue and let open the embedded ceremony directly
         ];
 
         $accountId = env('DOCUSIGN_ACCOUNT_ID');
@@ -108,13 +108,23 @@ class DocuSignController extends Controller
         //
         // 3) Create the envelope
         //
-        $envRes = $client->post("$baseUrl/v2.1/accounts/$accountId/envelopes", [
+
+
+        try{
+            $envRes = $client->post("$baseUrl/v2.1/accounts/$accountId/envelopes", [
             'headers' => [
                 'Authorization' => "Bearer $accessToken",
                 'Content-Type'  => 'application/json',
             ],
             'json' => $envelopeDef,
         ]);
+    } catch (\GuzzleHttp\Exception\ClientException $e) {
+            // Log or inspect the error
+            return response()->json([
+                'success' => false,
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
 
         $envelopeId = data_get(json_decode($envRes->getBody(), true), 'envelopeId');
 

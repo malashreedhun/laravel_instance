@@ -79,7 +79,7 @@ export default function Form({ auth, pageTitle, formUrl }) {
         placeholder="you@example.com"
         required
       />
-<button type="submit" disabled={processing}>Send by Email {envelopeId} </button>
+<button type="submit" disabled={processing}> -- Sign The Document -- (redirection might take a minute) {envelopeId} </button>
       {envelopeId && (
         <div className="mt-4 p-3 border rounded bg-green-50 text-green-800">
             Envelope created successfully! ID: <code>{envelopeId}</code>
